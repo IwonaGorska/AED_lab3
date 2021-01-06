@@ -4,6 +4,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, f1_s
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 
 X_train = None
 X_test = None
@@ -143,10 +144,103 @@ def zad3():
     # calculateAUC(dtLabels, y_test)
     # calculateAUC(rfLabels, y_test)
 
+def svm_CV():
+    global X_train, y_train
+    X = X_train
+    y = y_train
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.4, random_state=0)
+
+    X_train.shape, y_train.shape
+
+    X_test.shape, y_test.shape
+
+    clf = svm.SVC(kernel='linear', C=1).fit(X_train, y_train)
+    clf.score(X_test, y_test)
+
+
+    clf = svm.SVC()
+    clf.fit(X, y.values.ravel())
+    predicted = clf.predict(X_test)
+    print('SVM CV: ')
+    print(predicted)
+    return predicted
+
+def knn_CV():
+    global X_train, y_train
+    X = X_train
+    y = y_train
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.4, random_state=0)
+
+    X_train.shape, y_train.shape
+
+    X_test.shape, y_test.shape
+
+    model = KNeighborsClassifier(n_neighbors=2)
+
+    # Train the model using the training sets
+    model.fit(X, y.values.ravel())
+    # Predict Output
+    predicted = model.predict(X_test)
+    print('KNN: ')
+    print(predicted)
+    return predicted
+
+def decisionTree_CV():
+    global X_train, y_train
+    X = X_train
+    y = y_train
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.4, random_state=0)
+
+    X_train.shape, y_train.shape
+
+    X_test.shape, y_test.shape
+
+    # Create Decision Tree classifer object
+    clf = DecisionTreeClassifier()
+    # Train Decision Tree Classifer
+    clf = clf.fit(X, y.values.ravel())
+    predicted = clf.predict(X_test)
+    print('Decision Tree: ')
+    print(predicted)
+    return predicted
+
+def randomForest_CV():
+    global X_train, y_train
+    X = X_train
+    y = y_train
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.4, random_state=0)
+
+    X_train.shape, y_train.shape
+
+    X_test.shape, y_test.shape
+
+    # Create a Gaussian Classifier
+    clf = RandomForestClassifier(n_estimators=100)
+    # Train the model using the training sets
+    clf.fit(X, y.values.ravel())
+    predicted = clf.predict(X_test)
+    print('Random Forest: ')
+    print(predicted)
+    return predicted
+
+def zad3_2():
+    #Cross Validation is a technique which involves reserving a particular sample of a dataset
+    #on which you do not train the model.
+    #Later, you test your model on this sample before finalizing it.
+    svm_CV()
+    knn_CV()
+    decisionTree_CV()
+    randomForest_CV()
+
 
 zad1()
 zad2()
 zad3()
+zad3_2()
 
 #IMPORTANT NOTES:
 # - IN ZAD1 READ MAYBE SEPARATELY X AND y
