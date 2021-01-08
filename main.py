@@ -6,6 +6,9 @@ from sklearn.tree import DecisionTreeClassifier  # Import Decision Tree Classifi
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import time
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 X_train = None
 X_test = None
@@ -95,7 +98,7 @@ def calculateConfusionMatrix(y, y_test):
     print("CM:")
     print(cm)
 
-    ## TN, FP, FN, TP podobno robi sie tylko dla danych binarnych???
+    ## TN, FP, FN, TP dla danych innych niż binarne?
     # tn, fp, fn, tp = confusion_matrix(y, y_test).ravel()
     # print('Confusion matrix')
     # print((tn, fp, fn, tp))
@@ -312,13 +315,40 @@ def zad4():
     print("Wykonywalem się: "+str(((stopTime-startTime) / 60))+" minut")
     return [bestA, bestB, bestC, bestD, bestE, bestF]
 
+def zad5():
+    global X_train, X_test, y_train, y_test
+
+    # parametry dla algorytmu wpisane na sztywno
+    # ponieważ funkcja zad4() sprawdzająca różne parametry wykonywała się 53 minuty
+    # wpisane parametry są wynikiem działania tej funkcji
+    params = [1, 5, 'poly', 'scale', 2, 'ovo']
+    clf = svm.SVC(C=params[0], degree=params[1], kernel=params[2], gamma=params[3], coef0=params[4], decision_function_shape=params[5])
+    clf.fit(X_train, y_train.values.ravel())
+    predicted = clf.predict(X_test)
+
+    # rysowanie wykresów
+    datasetTrain = X_train
+    datasetTest = X_test
+    datasetTrain['cluster'] = y_train
+    datasetTest['cluster'] = predicted
+
+    fig, axs = plt.subplots(2)
+    axs[0].set_title("Zbiór treningowy")
+    axs[1].set_title("Zbiór testowy")
+
+    sns.scatterplot(x=datasetTrain[0], y=datasetTrain[1], hue=datasetTrain['cluster'], style=datasetTrain['cluster'], data=datasetTrain, ax=axs[0])
+    sns.scatterplot(x=datasetTest[0], y=datasetTest[1], hue=datasetTest['cluster'], style=datasetTest['cluster'], data=datasetTest, ax=axs[1])
+
+    plt.show()
+
 
 zad1()
-zad2()
-zad3()
-zad3_2()
+# zad2()
+# zad3()
+# zad3_2()
 ###### Zad4 - nie uruchamiać bez potrzeby
 ###### przy bieżących ustawieniach na mojej maszynie funkcja wykonywała się 53 minuty
 ###### i zwróciła wynik [1, 5, poly, scale, 2, ovo]
 # zad4()
+zad5()
 
